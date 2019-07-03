@@ -1,24 +1,27 @@
-[![build status][251]][232] [![commit][255]][231] [![version:armhf][258]][236] [![size:armhf][259]][236]
+[![build status][251]][232] [![commit][255]][231] [![version:armhf][258]][236] [![size:armhf][259]][236] [![version:armv7l][260]][237] [![size:armv7l][261]][237] [![version:aarch64][262]][238] [![size:aarch64][263]][238]
 
 ## [Alpine-RPiGPIO][234]
 #### Container for Alpine Linux + S6 + Python3 + RPi.GPIO
 ---
 
 This [image][233] serves as the base image for applications
-/ services running on a Raspberrpi Pi 2/3 that require GPIO
-access, using [RPi.GPIO][137], on [Python3][135] and [Pip][136] to
-manage dependencies.
+/ services running on a Raspberrpi Pi 1/2/3 that require GPIO
+access, using [RPi.GPIO][137] or serial access using
+[PySerial][138], on [Python3][135] and [Pip][136] to manage
+dependencies.
 
 Based on [Alpine Linux][131] from my [alpine-s6][132] image with
 the [s6][133] init system [overlayed][134] in it.
 
 The image is tagged respectively for the following architectures,
 * **armhf**
+* **armv7l**
+* **aarch64**
 * ~~**x86_64** (retagged as the `latest` )~~
 
-**armhf** builds have embedded binfmt_misc support and contain the
+**non-x86_64** builds have embedded binfmt_misc support and contain the
 [qemu-user-static][105] binary that allows for running it also inside
-an x64 environment that has it.
+an x86_64 environment that has it.
 
 ---
 #### Get the Image
@@ -102,14 +105,14 @@ docker restart docker_rpigpio
 Get a shell inside a already running container,
 
 ```
-# make shell
+# make debug
 docker exec -it docker_rpigpio /bin/bash
 ```
 
 set user or login as root,
 
 ```
-# make rshell
+# make rdebug
 docker exec -u root -it docker_rpigpio /bin/bash
 ```
 
@@ -159,11 +162,9 @@ for other architectures.]
 docker build --rm --compress --force-rm \
   --no-cache=true --pull \
   -f ./Dockerfile_armhf \
-  --build-arg ARCH=armhf \
-  --build-arg DOCKERSRC=alpine-s6 \
+  --build-arg DOCKERSRC=woahbase/alpine-python3:x86_64 \
   --build-arg PGID=1001 \
   --build-arg PUID=1001 \
-  --build-arg USERNAME=woahbase \
   -t woahbase/alpine-rpigpio:armhf \
   .
 ```
@@ -205,12 +206,13 @@ Maintained by [WOAHBase][204].
 [109]: https://microbadger.com/
 
 [131]: https://alpinelinux.org/
-[132]: https://hub.docker.com/r/woahbase/alpine-s6
+[132]: https://hub.docker.com/r/woahbase/alpine-python3
 [133]: https://skarnet.org/software/s6/
 [134]: https://github.com/just-containers/s6-overlay
 [135]: https://www.python.org/
 [136]: https://pypi.python.org/pypi/pip
 [137]: https://pypi.python.org/pypi/RPi.GPIO
+[138]: https://github.com/pyserial/pyserial
 
 [201]: https://github.com/woahbase
 [202]: https://travis-ci.org/woahbase/
@@ -223,6 +225,8 @@ Maintained by [WOAHBase][204].
 [234]: https://woahbase.online/#/images/alpine-rpigpio
 [235]: https://microbadger.com/images/woahbase/alpine-rpigpio:x86_64
 [236]: https://microbadger.com/images/woahbase/alpine-rpigpio:armhf
+[237]: https://microbadger.com/images/woahbase/alpine-rpigpio:armv7l
+[238]: https://microbadger.com/images/woahbase/alpine-rpigpio:aarch64
 
 [251]: https://travis-ci.org/woahbase/alpine-rpigpio.svg?branch=master
 
@@ -233,3 +237,9 @@ Maintained by [WOAHBase][204].
 
 [258]: https://images.microbadger.com/badges/version/woahbase/alpine-rpigpio:armhf.svg
 [259]: https://images.microbadger.com/badges/image/woahbase/alpine-rpigpio:armhf.svg
+
+[260]: https://images.microbadger.com/badges/version/woahbase/alpine-rpigpio:armv7l.svg
+[261]: https://images.microbadger.com/badges/image/woahbase/alpine-rpigpio:armv7l.svg
+
+[262]: https://images.microbadger.com/badges/version/woahbase/alpine-rpigpio:aarch64.svg
+[263]: https://images.microbadger.com/badges/image/woahbase/alpine-rpigpio:aarch64.svg
