@@ -364,11 +364,15 @@ annotate_latest : SKIP_ANNOTATE ?= $(if $(SKIP_LATESTTAG),1,)
 annotate_latest : TAGNAME = latest
 annotate_latest : manifest annotate ## annotate and push `latest` tag
 
+# use aarch64 image to extract version since we're not building x86_64
 annotate_version : SKIP_ANNOTATE ?= $(if $(SKIP_VERSIONTAG),1,)
+annotate_version : ARCH=aarch64
 annotate_version : TAGNAME ?= $(if $(VERSION),$(VERSION),$(error VERSION is not defined))
 annotate_version : manifest annotate ## annotate and push `VERSION` tag
 
+# use aarch64 image to extract version since we're not building x86_64
 annotate_date : SKIP_ANNOTATE ?= $(if $(SKIP_BUILDDATETAG),1,)
+annotate_date : ARCH=aarch64
 annotate_date : TAGNAME ?= $(if $(VERSION),$(VERSION)_,$(error VERSION is not defined))$(BUILDDATE)
 annotate_date : manifest annotate ## annotate and push `BUILDDATE` tag
 
