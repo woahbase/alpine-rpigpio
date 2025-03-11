@@ -1,0 +1,20 @@
+#!/usr/bin/with-contenv bash
+set -e
+
+vecho () { if [ "${S6_VERBOSITY:-1}" -gt 0  ]; then echo "[$0] $@"; fi; }
+if [ "X${EUID}" != "X0" ]; then vecho "Skipped. Reason: no root privileges."; exit 0; fi;
+
+vecho "Add ${S6_USER:-alpine} to group: dialout, tty";
+
+if [ -n "${GID_DIALOUT}" ]; # update gid of 'dialout' if defined
+then
+    groupmod -o -g "${GID_DIALOUT}" dialout;
+fi
+
+if [ -n "${GID_TTY}" ]; # update gid of 'tty' if defined
+then
+    groupmod -o -g "${GID_TTY}" tty;
+fi
+
+adduser ${S6_USER:-alpine} dialout;
+adduser ${S6_USER:-alpine} tty;

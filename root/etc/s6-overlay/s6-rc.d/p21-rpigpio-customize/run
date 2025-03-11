@@ -1,0 +1,7 @@
+#!/usr/bin/with-contenv bash
+set -e
+
+vecho () { if [ "${S6_VERBOSITY:-1}" -gt 0  ]; then echo "[$0] $@"; fi; }
+
+# bring your own custom setup script
+vecho "Nothing to customize for RPi.GPIO.";
